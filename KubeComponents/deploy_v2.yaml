@@ -1,0 +1,41 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: webapp
+  labels:
+    app: mywebapp
+    tier: frontend
+spec:
+  selector:
+    app: mywebapp
+    tier: frontend
+  type: LoadBalancer
+  ports:
+    - protocol: TCP
+      port: 80
+      name: task
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mydeployment1
+  labels:
+    app: mywebapp
+    tier: frontend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mywebapp
+      tier: frontend
+  template:
+    metadata:
+      labels:
+        app: mywebapp
+        tier: frontend
+    spec:
+      containers:
+        - name: myimage
+          image: devopsjourney1/mywebapp
+          ports:
+            - containerPort: 80
